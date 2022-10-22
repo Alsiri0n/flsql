@@ -18,7 +18,7 @@ class Flsql:
         """
         Function putting main menu links
         """
-        sql = '''SELECT * FROM mainmenu ORDER BY ID'''
+        sql = '''SELECT * FROM mainmenu ORDER BY ID;'''
         try:
             self.__cur.execute(sql)
             res = self.__cur.fetchall()
@@ -35,7 +35,7 @@ class Flsql:
         """
         try:
             cur_time = datetime.now()
-            self.__cur.execute('''INSERT INTO posts (title, posttext, posttime) VALUES (%s, %s, %s)''', (title, text, cur_time))
+            self.__cur.execute('''INSERT INTO posts (title, posttext, posttime) VALUES (%s, %s, %s);''', (title, text, cur_time))
             self.__my_db.commit()
         except psycopg2.OperationalError as err:
             print('Ошибка добавления статьи в БД: ', str(err))
@@ -48,7 +48,7 @@ class Flsql:
         This method get post by id
         """
         try:
-            self.__cur.execute(f"SELECT title, posttext FROM posts WHERE id = {postId} LIMIT 1")
+            self.__cur.execute(f"SELECT title, posttext FROM posts WHERE id = {postId} LIMIT 1;")
             res = self.__cur.fetchone()
             if res:
                 return res
@@ -56,3 +56,17 @@ class Flsql:
             print('Ошибка добавления статьи в БД: ', str(err))
 
         return {'title': False, 'posttext': False}
+
+
+    def get_posts_announcement(self):
+        """
+        Return announcement of the posts
+        """
+        try:
+            self.__cur.execute("SELECT id, title, posttext FROM posts ORDER BY time DESC;")
+            res = self.__cur.fetchall()
+            if res:
+                return res
+        except psycopg2.OperationalError as err:
+            print('Ошибка добавления статьи в БД: ', str(err))
+        return {}
