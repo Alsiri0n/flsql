@@ -2,7 +2,10 @@
 Database sql helper
 '''
 
+import psycopg2
 import psycopg2.extras
+import time
+import math
 class Flsql:
     '''
     Create Flask SQL class for sql query
@@ -21,6 +24,20 @@ class Flsql:
             res = self.__cur.fetchall()
             if res:
                 return res
-        except:
-            print('Ошибка чтения из БД')
+        except psycopg2.OperationalError as err:
+            print('Ошибка чтения из БД', str(err) )
         return []
+
+
+    def add_post(self, title, text):
+        '''
+        Method for adding post at site
+        '''
+        try:
+            cur_time = math.floor(time.time())
+            self.__cur.execute('''INSERT INTO posts (title, posttext, posttime) VALUES (%s, %s, %s)''', (title, text, cur_time))
+            self.__my_db.commit()
+        except psycopg2.OperationalError as err:
+            print('Ошибка добавления статьи в БД: ', str(err))
+            return False
+        return True
