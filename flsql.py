@@ -4,7 +4,7 @@ Database sql helper
 
 import psycopg2
 import psycopg2.extras
-import time
+from datetime import datetime
 import math
 class Flsql:
     '''
@@ -34,7 +34,7 @@ class Flsql:
         Method for adding post at site
         '''
         try:
-            cur_time = math.floor(time.time())
+            cur_time = datetime.now()
             self.__cur.execute('''INSERT INTO posts (title, posttext, posttime) VALUES (%s, %s, %s)''', (title, text, cur_time))
             self.__my_db.commit()
         except psycopg2.OperationalError as err:
