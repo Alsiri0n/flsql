@@ -41,3 +41,17 @@ class Flsql:
             print('Ошибка добавления статьи в БД: ', str(err))
             return False
         return True
+
+    def get_post(self, postId):
+        '''
+        This method get post by id
+        '''
+        try:
+            self.__cur.execute(f"SELECT title, text FROM posts WHERE id = {postId} LIMIT 1")
+            res = self.__cur.fetchone()
+            if res:
+                return res
+        except psycopg2.OperationalError as err:
+            print('Ошибка добавления статьи в БД: ', str(err))
+
+        return (False, False)
