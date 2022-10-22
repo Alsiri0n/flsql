@@ -1,11 +1,10 @@
 """
 Database sql helper
 """
-
+from datetime import datetime
 import psycopg2
 import psycopg2.extras
-from datetime import datetime
-import math
+
 class Flsql:
     """
     Create Flask SQL class for sql query
@@ -35,7 +34,8 @@ class Flsql:
         """
         try:
             cur_time = datetime.now()
-            self.__cur.execute('''INSERT INTO posts (title, posttext, posttime) VALUES (%s, %s, %s);''', (title, text, cur_time))
+            self.__cur.execute("INSERT INTO posts (title, posttext, posttime) VALUES (%s, %s, %s);",
+                (title, text, cur_time))
             self.__my_db.commit()
         except psycopg2.OperationalError as err:
             print('Ошибка добавления статьи в БД: ', str(err))
@@ -43,17 +43,17 @@ class Flsql:
         return True
 
 
-    def get_post(self, postId):
+    def get_post(self, post_id):
         """
         This method get post by id
         """
         try:
-            self.__cur.execute(f"SELECT title, posttext FROM posts WHERE id = {postId} LIMIT 1;")
+            self.__cur.execute(f"SELECT title, posttext FROM posts WHERE id = {post_id} LIMIT 1;")
             res = self.__cur.fetchone()
             if res:
                 return res
         except psycopg2.OperationalError as err:
-            print('Ошибка добавления статьи в БД: ', str(err))
+            print('Ошибка чтения из БД: ', str(err))
 
         return {'title': False, 'posttext': False}
 
@@ -63,10 +63,10 @@ class Flsql:
         Return announcement of the posts
         """
         try:
-            self.__cur.execute("SELECT id, title, posttext FROM posts ORDER BY time DESC;")
+            self.__cur.execute("SELECT id, title, posttext FROM posts ORDER BY posttime DESC;")
             res = self.__cur.fetchall()
             if res:
                 return res
         except psycopg2.OperationalError as err:
-            print('Ошибка добавления статьи в БД: ', str(err))
+            print('Ошибка чтения из БД: ', str(err))
         return {}
