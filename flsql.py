@@ -15,7 +15,7 @@ class Flsql:
         '''
         Function putting main menu links
         '''
-        sql = '''SELECT * FROM mainmenu'''
+        sql = '''SELECT * FROM mainmenu ORDER BY ID'''
         try:
             self.__cur.execute(sql)
             res = self.__cur.fetchall()
