@@ -1,13 +1,15 @@
 '''
 Database sql helper
 '''
+
+import psycopg2.extras
 class Flsql:
     '''
     Create Flask SQL class for sql query
     '''
     def __init__(self, cur_db):
         self.__my_db = cur_db
-        self.__cur = cur_db.cursor()
+        self.__cur = cur_db.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
 
     def get_menu(self):
         '''
