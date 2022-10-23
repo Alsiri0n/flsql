@@ -62,7 +62,7 @@ class Flsql:
             res = self.__cur.fetchone()
             if res:
                 base = url_for("static", filename="images")
-                text  = re.sub(r"(?p<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>",
+                text  = re.sub(r"(?P<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>",
                 "\\g<tag>" + base + "/\\g<url>>",
                 res['posttext'])
                 return {"title": res['title'], "posttext": text}
