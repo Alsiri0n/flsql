@@ -51,12 +51,12 @@ class Flsql:
         return True
 
 
-    def get_post(self, post_id):
+    def get_post(self, alias):
         """
         This method get post by id
         """
         try:
-            self.__cur.execute(f"SELECT title, posttext FROM posts WHERE id = {post_id} LIMIT 1;")
+            self.__cur.execute(f"SELECT title, posttext FROM posts WHERE posturl LIKE '{alias}' LIMIT 1;")
             res = self.__cur.fetchone()
             if res:
                 return res
