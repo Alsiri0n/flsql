@@ -1,8 +1,10 @@
 """
 Database sql helper
 """
+import re
 from datetime import datetime
 from psycopg2 import OperationalError
+from flask import url_for
 import psycopg2.extras
 
 class Flsql:
@@ -59,7 +61,11 @@ class Flsql:
             self.__cur.execute(f"SELECT title, posttext FROM posts WHERE posturl LIKE '{alias}' LIMIT 1;")
             res = self.__cur.fetchone()
             if res:
-                return res
+                base = url_for("static", filename="images")
+                text  = re.sub(r"(?p<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>",
+                "\\g<tag>" + base + "/\\g<url>>",
+                res['text'])
+                return {"title": res['title'], "posttext": text}}
         except OperationalError as err:
             print("Ошибка чтения из БД: ", str(err))
 
