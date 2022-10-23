@@ -42,6 +42,11 @@ class Flsql:
                 print("Статья с таким url уже существует.")
                 return False
 
+            base = url_for("static", filename="images")
+            text  = re.sub(r"(?P<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>",
+                "\\g<tag>\\g<quote>" + base + "/\\g<url>\\g<quote>>",
+                text)
+
             cur_time = datetime.now()
             self.__cur.execute("INSERT INTO posts (title, posttext, posturl, posttime)\
                                 VALUES (%s, %s, %s, %s);",
@@ -61,11 +66,7 @@ class Flsql:
             self.__cur.execute(f"SELECT title, posttext FROM posts WHERE posturl LIKE '{alias}' LIMIT 1;")
             res = self.__cur.fetchone()
             if res:
-                base = url_for("static", filename="images")
-                text  = re.sub(r"(?P<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>",
-                "\\g<tag>\\g<quote>" + base + "/\\g<url>\\g<quote>>",
-                res['posttext'])
-                return {"title": res['title'], "posttext": text}
+                return res
         except OperationalError as err:
             print("Ошибка чтения из БД: ", str(err))
 
