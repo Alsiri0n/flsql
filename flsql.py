@@ -65,7 +65,7 @@ class Flsql:
                 text  = re.sub(r"(?p<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>",
                 "\\g<tag>" + base + "/\\g<url>>",
                 res['text'])
-                return {"title": res['title'], "posttext": text}}
+                return {"title": res['title'], "posttext": text}
         except OperationalError as err:
             print("Ошибка чтения из БД: ", str(err))
 
