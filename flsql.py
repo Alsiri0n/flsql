@@ -64,7 +64,7 @@ class Flsql:
                 base = url_for("static", filename="images")
                 text  = re.sub(r"(?p<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>",
                 "\\g<tag>" + base + "/\\g<url>>",
-                res['text'])
+                res['posttext'])
                 return {"title": res['title'], "posttext": text}
         except OperationalError as err:
             print("Ошибка чтения из БД: ", str(err))
