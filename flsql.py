@@ -63,7 +63,7 @@ class Flsql:
             if res:
                 base = url_for("static", filename="images")
                 text  = re.sub(r"(?P<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>",
-                "\\g<tag>" + base + "/\\g<url>>",
+                "\\g<tag>\\g<quote>" + base + "/\\g<url>>",
                 res['posttext'])
                 return {"title": res['title'], "posttext": text}
         except OperationalError as err:
