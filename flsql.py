@@ -71,7 +71,7 @@ class Flsql:
         Return announcement of the posts
         """
         try:
-            self.__cur.execute("SELECT id, title, posttext FROM posts ORDER BY posttime DESC;")
+            self.__cur.execute("SELECT id, title, posttext, posturl FROM posts ORDER BY posttime DESC;")
             res = self.__cur.fetchall()
             if res:
                 return res
