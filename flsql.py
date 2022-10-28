@@ -36,7 +36,7 @@ class Flsql:
         """
         try:
             self.__cur.execute(
-                f'SELECT COUNT(*) as "count" FROM posts WHERE posturl LIKE "{url}";')
+                f'SELECT COUNT(*) as "count" FROM posts WHERE posturl LIKE \'{url}\';')
             res = self.__cur.fetchone()
             if res["count"] > 0:
                 print("Статья с таким url уже существует.")
@@ -63,7 +63,7 @@ class Flsql:
         This method get post by id
         """
         try:
-            self.__cur.execute(f'SELECT title, posttext FROM posts WHERE posturl LIKE "{alias}" LIMIT 1;')
+            self.__cur.execute(f'SELECT title, posttext FROM posts WHERE posturl LIKE \'{alias}\' LIMIT 1;')
             res = self.__cur.fetchone()
             if res:
                 return res
@@ -87,16 +87,19 @@ class Flsql:
         return {}
 
 
-    def addUser(self, name, email, hpsw):
+    def add_user(self, name, email, hpsw):
+        """
+        Create new user
+        """
         try:
             self.__cur.execute(
-                f'SELECT COUNT(*) as "count" FROM users WHERE email LIKE "{email}";')
+                f'SELECT COUNT(*) as "count" FROM users WHERE email LIKE \'{email}\';')
             res = self.__cur.fetchone()
             if res['count'] > 0:
                 print('Пользователь с таким email уже существует.')
                 return False
             cur_time = datetime.now()
-            self.__cur.execute('INSERT INTO users (name, email, psw, date)\
+            self.__cur.execute('INSERT INTO users (username, email, psw, registerdate)\
                                 VALUES (%s, %s, %s, %s);',
                                 (name, email, hpsw, cur_time))
             self.__my_db.commit()
